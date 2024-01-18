@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -62,8 +65,21 @@ dependencies {
 
 
     implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.firebase:firebase-firestore:24.10.0")
+    implementation ("com.google.android.gms:play-services-auth:20.4.1")
+
+    // Coil
+    implementation ("io.coil-kt:coil-compose:2.3.0")
 
 
+    //Hilt
+    implementation("com.google.dagger:hilt-android:2.49")
+    kapt("com.google.dagger:hilt-android-compiler:2.49")
+
+    implementation( "androidx.hilt:hilt-navigation-compose:1.1.0")
+
+    implementation("com.github.stevdza-san:OneTapCompose:1.0.11")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -72,4 +88,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    debugImplementation ("com.squareup.leakcanary:leakcanary-android:3.0-alpha-1")
+
+
 }
