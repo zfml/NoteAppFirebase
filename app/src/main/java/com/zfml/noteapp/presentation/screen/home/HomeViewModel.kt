@@ -12,6 +12,10 @@ import com.zfml.noteapp.domain.repository.NoteRepository
 import com.zfml.noteapp.domain.repository.NotesResponse
 import com.zfml.noteapp.model.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -21,20 +25,38 @@ class HomeViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
 ) : ViewModel() {
 
-    val userName = Firebase.auth.currentUser?.displayName
-    val image = Firebase.auth.currentUser?.photoUrl
+    private val userName = Firebase.auth.currentUser!!.displayName
+    private val profileImage = Firebase.auth.currentUser!!.photoUrl
 
-    var notesRespones by mutableStateOf<NotesResponse>(Response.Loading)
-        private set
+
+    private val _notesUiState = MutableStateFlow(NotesUiState())
+    val notesUiState: StateFlow<NotesUiState> = _notesUiState
 
     init {
         getAllNotes()
-    }
 
+    }
     private fun getAllNotes() {
         viewModelScope.launch {
-            noteRepository.getAllNote().collect { responses ->
-                notesRespones = responses
+            noteRepository.getAllNote().collect {responese ->
+                when(responese) {
+                    is Response.Error -> {
+                        _notesUiState.update {currentState ->
+                              currentState.copy(
+                                 error = responese.error.toString()
+                             )
+                        }
+                    }
+                    Response.Loading -> TODO()
+                    is Response.Success -> {
+                        _notesUiState.update {currentState ->
+                           currentState.copy(
+                               notes = responese.data
+                           )
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -47,4 +69,19 @@ class HomeViewModel @Inject constructor(
             onSuccess()
         }
     }
+
+
+    fun getUserName() = userName!!
+    fun getUserProfileImage() =  profileImage!!
+
 }
+
+
+
+
+
+
+data class NotesUiState(
+    val notes: Map<LocalDate,List<Note>> = emptyMap(),
+    val error: String = ""
+)

@@ -43,6 +43,8 @@ import coil.compose.AsyncImage
 import com.zfml.noteapp.R
 import com.zfml.noteapp.domain.repository.NotesResponse
 import com.zfml.noteapp.model.Response
+import com.zfml.noteapp.presentation.components.EmptyPage
+import kotlinx.coroutines.channels.ticker
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,9 +52,9 @@ import com.zfml.noteapp.model.Response
 @Composable
 fun HomeScreen(
     drawerState: DrawerState,
-    userName: String?,
+    userName: String,
     userImage: String,
-    notesResponse: NotesResponse,
+    notesUiState: NotesUiState,
     onSignOutClicked: () -> Unit,
     openDrawerClicked: () -> Unit,
     onNavigateToWrite: () -> Unit,
@@ -87,23 +89,22 @@ fun HomeScreen(
             },
             content = {padding ->
 
-                when(notesResponse) {
-                    is Response.Error -> TODO()
-                    Response.Loading -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    }
-                    is Response.Success -> {
-                        HomeContent(
-                            onClick = onNavigateToWriteWithArg,
-                            padding = padding,
-                            notes = notesResponse.data
-                        )
-                    }
+                if(notesUiState.error.isNotEmpty()) {
+                    EmptyPage(
+                       title = notesUiState.error
+                    )
+                }
+                if(notesUiState.notes.isNotEmpty()) {
+                    HomeContent(
+                        onClick = onNavigateToWriteWithArg,
+                        padding = padding,
+                        notes = notesUiState.notes
+                    )
+                }else {
+                    EmptyPage(
+                        title = "No Note",
+                        subTitle = "Write Something.."
+                    )
                 }
 
             }

@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -22,10 +24,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
 import com.stevdzasan.onetap.rememberOneTapSignInState
 import com.zfml.noteapp.R
@@ -134,15 +132,13 @@ fun NavGraphBuilder.homeRoute (
         var openSignOutDialog by remember{mutableStateOf(false) }
         val context = LocalContext.current
 
-
-
-
+        val notesUiState by viewModel.notesUiState.collectAsStateWithLifecycle()
 
 
         HomeScreen(
-            userName = viewModel.userName,
-            userImage = viewModel.image.toString(),
-            notesResponse = viewModel.notesRespones,
+            userName = viewModel.getUserName(),
+            userImage = viewModel.getUserProfileImage().toString(),
+            notesUiState = notesUiState,
             drawerState = drawerState,
             openDrawerClicked = {
                 scope.launch {
