@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import com.zfml.noteapp.domain.model.Note
@@ -28,7 +29,8 @@ class NoteRepositoryImpl @Inject constructor(
     override suspend fun getAllNote() = callbackFlow {
 
         val snapshotListener = notesRef.document(userId!!)
-            .collection("notes")
+            .collection(NOTES_COLLECTION)
+            .orderBy("createdDate", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 val notesResponse = if (snapshot != null) {
                     val notes = snapshot.toObjects(Note::class.java)

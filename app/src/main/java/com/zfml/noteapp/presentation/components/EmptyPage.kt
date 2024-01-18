@@ -12,18 +12,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun EmptyPage() {
+fun EmptyPage(
+    title: String = "",
+    subTitle: String = ""
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column {
             Text(
-                text = "Empty Note"
+                text = title
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Write Something!"
+                text = subTitle
             )
         }
 
