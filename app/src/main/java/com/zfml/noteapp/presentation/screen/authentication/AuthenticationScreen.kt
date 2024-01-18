@@ -1,4 +1,4 @@
-package com.zfml.noteapp.presentation.authentication
+package com.zfml.noteapp.presentation.screen.authentication
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.ExperimentalMaterial3Api

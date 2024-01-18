@@ -1,5 +1,6 @@
-package com.zfml.noteapp.presentation.authentication
+package com.zfml.noteapp.presentation.screen.authentication
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,20 +31,22 @@ class AuthenticationViewModel: ViewModel() {
     ) {
         viewModelScope.launch {
 
-            withContext(Dispatchers.IO) {
-                val auth = Firebase.auth
-                val firebaseCredential = GoogleAuthProvider.getCredential(tokenId,null)
-                auth.signInWithCredential(firebaseCredential)
-                    .addOnCompleteListener {task ->
+                withContext(Dispatchers.IO) {
+                    val auth = Firebase.auth
+                    val firebaseCredential = GoogleAuthProvider.getCredential(tokenId,null)
+                    Log.d("credential",firebaseCredential.toString())
+                    auth.signInWithCredential(firebaseCredential)
+                        .addOnCompleteListener { task ->
 
-                        if(task.isSuccessful) {
-                            onSuccess()
-                            authenticated.value = true
-                        }else {
-                            onError("Authentication Failed")
+                            if(task.isSuccessful) {
+                                onSuccess()
+                                authenticated.value = true
+                            }else {
+                                onError("Authentication Failed")
+                            }
                         }
-                    }
-            }
+                }
+
         }
     }
 

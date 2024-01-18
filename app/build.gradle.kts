@@ -69,6 +69,9 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.10.0")
     implementation ("com.google.android.gms:play-services-auth:20.4.1")
 
+    // Coil
+    implementation ("io.coil-kt:coil-compose:2.3.0")
+
 
     //Hilt
     implementation("com.google.dagger:hilt-android:2.49")
@@ -85,4 +88,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    debugImplementation ("com.squareup.leakcanary:leakcanary-android:3.0-alpha-1")
+
+
 }

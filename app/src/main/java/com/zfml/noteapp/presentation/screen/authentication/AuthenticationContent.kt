@@ -1,4 +1,4 @@
-package com.zfml.noteapp.presentation.authentication
+package com.zfml.noteapp.presentation.screen.authentication
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
