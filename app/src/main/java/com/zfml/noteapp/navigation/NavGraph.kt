@@ -208,7 +208,7 @@ fun NavGraphBuilder.writeRoute(
         },
         onSaveNote = {
 
-               if(viewModel.IsValidInput()) {
+               if(viewModel.isValidInput()) {
                    viewModel.saveNote(
                        onSuccess = {
                            Toast.makeText(
