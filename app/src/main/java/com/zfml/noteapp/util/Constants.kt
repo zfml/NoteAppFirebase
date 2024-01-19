@@ -9,4 +9,6 @@ object Constants {
 
     const val FIREBASE_COLLECTION = "users"
     const val NOTES_COLLECTION = "notes"
+
+    const val CREATED_DATE = "createdDate"
 }

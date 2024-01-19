@@ -1,20 +1,15 @@
 package com.zfml.noteapp.presentation.screen.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.zfml.noteapp.domain.model.Note
 import com.zfml.noteapp.domain.repository.NoteRepository
-import com.zfml.noteapp.domain.repository.NotesResponse
-import com.zfml.noteapp.model.Response
+import com.zfml.noteapp.domain.model.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -77,11 +72,8 @@ class HomeViewModel @Inject constructor(
 }
 
 
-
-
-
-
 data class NotesUiState(
     val notes: Map<LocalDate,List<Note>> = emptyMap(),
-    val error: String = ""
+    val error: String = "",
+    val loading: Boolean = false
 )

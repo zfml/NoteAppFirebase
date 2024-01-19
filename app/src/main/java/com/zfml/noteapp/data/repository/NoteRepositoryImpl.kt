@@ -9,7 +9,8 @@ import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import com.zfml.noteapp.domain.model.Note
 import com.zfml.noteapp.domain.repository.NoteRepository
-import com.zfml.noteapp.model.Response
+import com.zfml.noteapp.domain.model.Response
+import com.zfml.noteapp.util.Constants.CREATED_DATE
 import com.zfml.noteapp.util.Constants.NOTES_COLLECTION
 import com.zfml.noteapp.util.toLocalDate
 import kotlinx.coroutines.channels.awaitClose
@@ -28,11 +29,13 @@ class NoteRepositoryImpl @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getAllNote() = callbackFlow {
 
+
         val snapshotListener = notesRef.document(userId!!)
             .collection(NOTES_COLLECTION)
-            .orderBy("createdDate", Query.Direction.DESCENDING)
+            .orderBy(CREATED_DATE , Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 val notesResponse = if (snapshot != null) {
+                    Response.Loading
                     val notes = snapshot.toObjects(Note::class.java)
                     Response.Success(
                         notes.groupBy { note ->
@@ -49,7 +52,7 @@ class NoteRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getNote(noteId: String): Response<Note> = try {
+    override suspend fun getNoteById(noteId: String): Response<Note> = try {
         val noteDocument =
             notesRef.document(userId!!).collection(NOTES_COLLECTION).document(noteId).get().await()
         val note = noteDocument.toObject<Note>() ?: Note()

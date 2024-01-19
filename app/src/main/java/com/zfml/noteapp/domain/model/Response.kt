@@ -1,4 +1,4 @@
-package com.zfml.noteapp.model
+package com.zfml.noteapp.domain.model
 
 sealed class Response<out T> {
     object Loading: Response<Nothing>()

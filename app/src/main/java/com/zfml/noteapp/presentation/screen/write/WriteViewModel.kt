@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zfml.noteapp.domain.model.Note
 import com.zfml.noteapp.domain.repository.NoteRepository
-import com.zfml.noteapp.model.Response
+import com.zfml.noteapp.domain.model.Response
 import com.zfml.noteapp.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -71,7 +71,7 @@ class WriteViewModel @Inject constructor(
         savedStateHandle.get<String>(WRITE_SCREEN_ARGUMENT_KEY).let {noteId ->
             if(noteId != null) {
                 viewModelScope.launch {
-                    when(val result = noteRepository.getNote(noteId)) {
+                    when(val result = noteRepository.getNoteById(noteId)) {
                         is Response.Error -> TODO()
                         Response.Loading -> TODO()
                         is Response.Success -> {
