@@ -106,10 +106,7 @@ class WriteViewModel @Inject constructor(
     }
 
     fun IsValidInput(title:String = _noteTitle.value.text , description: String = _noteDescription.value.text):Boolean {
-        if(title.isNotEmpty() && description.isNotEmpty()) {
-            return true
-        }
-        return false
+        return title.isNotEmpty() && description.isNotEmpty()
     }
 
 

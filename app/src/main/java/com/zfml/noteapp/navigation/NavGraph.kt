@@ -191,6 +191,9 @@ fun NavGraphBuilder.writeRoute(
     ) {
         val context  = LocalContext.current
         val viewModel : WriteViewModel = hiltViewModel()
+
+        var openDeleteDialog by remember{ mutableStateOf(false) }
+
         WriteScreen(
         onNavigateToHome = onNavigateToHome,
         createdDate = viewModel.createdDate.value,
@@ -201,8 +204,7 @@ fun NavGraphBuilder.writeRoute(
         onDescriptionChanged = {viewModel.onChangedDescription(it)},
         onDescriptionFocusChanged = {viewModel.onChangedDescriptionFocus(it)},
         onDeleteNote = {
-            viewModel.deleteNote()
-            onNavigateToHome()
+            openDeleteDialog = true
         },
         onSaveNote = {
 
@@ -234,6 +236,21 @@ fun NavGraphBuilder.writeRoute(
 
             }
         )
+
+        DisplayAlertDialog(
+            title = "Delete Note?",
+            description = "Are you sure you want to delete note?",
+            openDialog = openDeleteDialog,
+            onClosedDialog = {
+                openDeleteDialog= false
+            },
+            onConfirmClicked = {
+                openDeleteDialog =false
+                viewModel.deleteNote()
+                onNavigateToHome()
+            }) {
+
+        }
     }
 }
 
