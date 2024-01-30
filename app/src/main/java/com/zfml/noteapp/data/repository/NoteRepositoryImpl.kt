@@ -24,13 +24,14 @@ import kotlin.Exception
 class NoteRepositoryImpl @Inject constructor(
     private val notesRef: CollectionReference,
 ) : NoteRepository {
-    private val userId = Firebase.auth.currentUser?.uid
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getAllNote() = callbackFlow {
 
 
-        val snapshotListener = notesRef.document(userId!!)
+        val snapshotListener = notesRef.document(Firebase.auth.currentUser?.uid!!)
             .collection(NOTES_COLLECTION)
             .orderBy(CREATED_DATE , Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
@@ -54,7 +55,7 @@ class NoteRepositoryImpl @Inject constructor(
 
     override suspend fun getNoteById(noteId: String): Response<Note> = try {
         val noteDocument =
-            notesRef.document(userId!!).collection(NOTES_COLLECTION).document(noteId).get().await()
+            notesRef.document(Firebase.auth.currentUser?.uid!!).collection(NOTES_COLLECTION).document(noteId).get().await()
         val note = noteDocument.toObject<Note>() ?: Note()
         Response.Success(note)
     } catch (e: Exception) {
@@ -65,7 +66,7 @@ class NoteRepositoryImpl @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun addNote(note: Note): Response<Boolean> = try {
         val id = notesRef.document().id
-        notesRef.document(userId!!).collection(NOTES_COLLECTION).document(id)
+        notesRef.document(Firebase.auth.currentUser?.uid!!).collection(NOTES_COLLECTION).document(id)
             .set(note.copy(id = id)).await()
         Response.Success(true)
     } catch (e: Exception) {
@@ -73,13 +74,13 @@ class NoteRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateNote(note: Note): Response<Boolean> = try {
-         notesRef.document(userId!!).collection(NOTES_COLLECTION).document(note.id).set(note).await()
+         notesRef.document(Firebase.auth.currentUser?.uid!!).collection(NOTES_COLLECTION).document(note.id).set(note).await()
                     Response.Success(true)
                 } catch (e: Exception) {
                     Response.Error(e)
                 }
     override suspend fun deleteNote(noteId: String): Response<Boolean> = try {
-        notesRef.document(userId!!).collection(NOTES_COLLECTION).document(noteId).delete().await()
+        notesRef.document(Firebase.auth.currentUser?.uid!!).collection(NOTES_COLLECTION).document(noteId).delete().await()
         Response.Success(true)
     } catch (e : Exception) {
         Response.Error(e)
