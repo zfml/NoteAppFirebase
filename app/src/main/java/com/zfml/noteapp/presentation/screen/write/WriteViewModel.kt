@@ -121,7 +121,7 @@ class WriteViewModel @Inject constructor(
             )
             when(val result =  noteRepository.addNote(note)) {
                 is Response.Error -> onError(result.error.toString())
-                Response.Loading -> TODO()
+                Response.Loading -> {}
                 is Response.Success -> onSuccess()
             }
         }

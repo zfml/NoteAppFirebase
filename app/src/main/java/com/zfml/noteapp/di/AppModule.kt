@@ -29,13 +29,25 @@ import javax.inject.Singleton
 @Module
 object AppModule {
 
+
  @Provides
  @Singleton
+ fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+ @Provides
+ @Singleton
+ fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
+ @Provides
  fun provideNotesRef() = Firebase.firestore.collection(FIREBASE_COLLECTION)
 
 @Provides
 @Singleton
-fun provideNoteRepository(notesRef: CollectionReference): NoteRepository = NoteRepositoryImpl(notesRef)
+fun provideNoteRepository(
+ firebaseAuth: FirebaseAuth,
+ firebaseFirestore: FirebaseFirestore,
+ notesRef: CollectionReference
+): NoteRepository = NoteRepositoryImpl(firebaseAuth,firebaseFirestore,notesRef)
 
 
 

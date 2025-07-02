@@ -77,7 +77,7 @@ fun NavGraphBuilder.authenticationRoute(
 ) {
     composable(route = Screen.Authentication.route) {
 
-        val viewModel: AuthenticationViewModel = viewModel()
+        val viewModel: AuthenticationViewModel = hiltViewModel()
         val loadingState by viewModel.loadingState
         val oneTapState = rememberOneTapSignInState()
         val authenticated by viewModel.authenticated

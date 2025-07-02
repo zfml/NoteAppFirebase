@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.zfml.noteapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.zfml.noteapp"
@@ -43,7 +43,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     packaging {
         resources {
@@ -83,7 +83,8 @@ dependencies {
 
 
     implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.6.0")
-
+    //SplashScreen
+    implementation ("androidx.core:core-splashscreen:1.0.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

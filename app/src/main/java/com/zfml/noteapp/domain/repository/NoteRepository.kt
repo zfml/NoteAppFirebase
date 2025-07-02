@@ -17,5 +17,13 @@ interface NoteRepository {
 
     suspend fun deleteNote(noteId: String): Response<Boolean>
 
+    suspend fun signOut()
+
+    suspend fun signInWithTokenId(
+        tokenId: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+        )
+
 
 }

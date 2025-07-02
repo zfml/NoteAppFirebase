@@ -7,12 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.zfml.noteapp.domain.repository.NoteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
-class AuthenticationViewModel: ViewModel() {
+import javax.inject.Inject
+@HiltViewModel
+class AuthenticationViewModel @Inject constructor(
+    private val noteRepository: NoteRepository,
+) : ViewModel() {
 
     var authenticated  = mutableStateOf(false)
         private set
@@ -32,19 +37,15 @@ class AuthenticationViewModel: ViewModel() {
         viewModelScope.launch {
 
                 withContext(Dispatchers.IO) {
-                    val auth = Firebase.auth
-                    val firebaseCredential = GoogleAuthProvider.getCredential(tokenId,null)
-                    Log.d("credential",firebaseCredential.toString())
-                    auth.signInWithCredential(firebaseCredential)
-                        .addOnCompleteListener { task ->
+                  noteRepository.signInWithTokenId(tokenId,
+                      onSuccess = {
+                          authenticated.value = true
 
-                            if(task.isSuccessful) {
-                                onSuccess()
-                                authenticated.value = true
-                            }else {
-                                onError("Authentication Failed")
-                            }
-                        }
+                      },
+                      onError =  {
+                          onError(it)
+                      }
+                      )
                 }
 
         }

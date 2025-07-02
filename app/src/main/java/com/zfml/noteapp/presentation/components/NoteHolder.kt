@@ -77,7 +77,7 @@ fun NoteHolder(
             modifier = Modifier
                 .clip(Shapes().medium)
                 .onGloballyPositioned {
-                    componentHeight = with(localDensity){it.size.height.toDp()}
+                    componentHeight = with(localDensity) { it.size.height.toDp() }
                 }
             ,
             tonalElevation = Elevation.Level1
@@ -130,8 +130,9 @@ fun NoteHolder(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview()
 @Composable
 fun NoteHolderPreview() {
-//    NoteHolder(note = Note(title = "Piano ", description = "I am listening to the Piano", timestamp = Timestamp.now()), onClick = {})
+    NoteHolder(note = Note(), onClick = {})
 }

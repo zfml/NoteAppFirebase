@@ -38,15 +38,23 @@ class HomeViewModel @Inject constructor(
                     is Response.Error -> {
                         _notesUiState.update {currentState ->
                               currentState.copy(
-                                 error = responese.error.toString()
+                                 error = responese.error.toString(),
+                                  loading = false
                              )
                         }
                     }
-                    Response.Loading -> TODO()
+                    Response.Loading -> {
+                        _notesUiState.update {
+                            it.copy(
+                                loading = true
+                            )
+                        }
+                    }
                     is Response.Success -> {
                         _notesUiState.update {currentState ->
                            currentState.copy(
-                               notes = responese.data
+                               notes = responese.data,
+                               loading = false
                            )
                         }
                     }
@@ -60,7 +68,7 @@ class HomeViewModel @Inject constructor(
         onSuccess: () -> Unit,
     ) {
         viewModelScope.launch {
-            Firebase.auth.signOut()
+            noteRepository.signOut()
             onSuccess()
         }
     }
