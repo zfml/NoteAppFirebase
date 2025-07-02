@@ -24,6 +24,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
 import com.stevdzasan.onetap.rememberOneTapSignInState
 import com.zfml.noteapp.R
@@ -41,11 +43,15 @@ import kotlinx.coroutines.launch
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
-    startDestination: String
+//    startDestination: String
 ) {
+
+
+
+
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = Screen.Authentication.route
     ) {
         homeRoute(
             navigateToAuthScreen = {
@@ -81,6 +87,14 @@ fun NavGraphBuilder.authenticationRoute(
         val loadingState by viewModel.loadingState
         val oneTapState = rememberOneTapSignInState()
         val authenticated by viewModel.authenticated
+
+
+        val isUserLoggedIn by viewModel.isUserLoggedIn.collectAsState()
+
+
+        if (isUserLoggedIn == true) {
+            navigateToHomeScreen()
+        }
 
         AuthenticationScreen(
             authenticated = authenticated,
@@ -136,8 +150,8 @@ fun NavGraphBuilder.homeRoute (
 
 
         HomeScreen(
-            userName = viewModel.getUserName(),
-            userImage = viewModel.getUserProfileImage().toString(),
+            userName = viewModel.userName,
+            userImage = viewModel.profileImage,
             notesUiState = notesUiState,
             drawerState = drawerState,
             openDrawerClicked = {

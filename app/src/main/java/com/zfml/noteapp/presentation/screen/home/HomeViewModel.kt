@@ -1,9 +1,10 @@
 package com.zfml.noteapp.presentation.screen.home
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.zfml.noteapp.domain.model.Note
 import com.zfml.noteapp.domain.repository.NoteRepository
 import com.zfml.noteapp.domain.model.Response
@@ -20,8 +21,12 @@ class HomeViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
 ) : ViewModel() {
 
-    private val userName = Firebase.auth.currentUser!!.displayName
-    private val profileImage = Firebase.auth.currentUser!!.photoUrl
+
+
+   var userName by  mutableStateOf("")
+       private set
+
+    val profileImage by mutableStateOf("")
 
 
     private val _notesUiState = MutableStateFlow(NotesUiState())
@@ -29,8 +34,17 @@ class HomeViewModel @Inject constructor(
 
     init {
         getAllNotes()
+        getUserData()
 
     }
+
+    private fun getUserData() {
+        viewModelScope.launch{
+            val user = noteRepository.getCurrentUser()
+            userName = user?.name?: ""
+        }
+    }
+
     private fun getAllNotes() {
         viewModelScope.launch {
             noteRepository.getAllNote().collect {responese ->
@@ -74,8 +88,6 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun getUserName() = userName!!
-    fun getUserProfileImage() =  profileImage!!
 
 }
 

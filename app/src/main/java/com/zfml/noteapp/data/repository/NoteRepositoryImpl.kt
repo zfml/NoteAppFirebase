@@ -13,6 +13,7 @@ import com.google.firebase.ktx.Firebase
 import com.zfml.noteapp.domain.model.Note
 import com.zfml.noteapp.domain.repository.NoteRepository
 import com.zfml.noteapp.domain.model.Response
+import com.zfml.noteapp.domain.model.User
 import com.zfml.noteapp.util.Constants.CREATED_DATE
 import com.zfml.noteapp.util.Constants.NOTES_COLLECTION
 import com.zfml.noteapp.util.toLocalDate
@@ -108,6 +109,17 @@ class NoteRepositoryImpl @Inject constructor(
                     onError("Authentication Failed")
                 }
             }
+    }
+
+    override suspend fun getCurrentUser(): User? {
+        firebaseAuth.currentUser?.let {
+            return User(
+                uid = it.uid,
+                email = it.email,
+                name = it.displayName
+            )
+        }
+        return null
     }
 
 

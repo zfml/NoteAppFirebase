@@ -2,6 +2,7 @@ package com.zfml.noteapp.domain.repository
 
 import com.zfml.noteapp.domain.model.Note
 import com.zfml.noteapp.domain.model.Response
+import com.zfml.noteapp.domain.model.User
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
@@ -23,7 +24,9 @@ interface NoteRepository {
         tokenId: String,
         onSuccess: () -> Unit,
         onError: (String) -> Unit
-        )
+    )
+
+    suspend fun getCurrentUser(): User?
 
 
 }
