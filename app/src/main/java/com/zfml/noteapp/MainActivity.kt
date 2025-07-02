@@ -31,19 +31,11 @@ class MainActivity : ComponentActivity() {
             NoteAppTheme {
                 navController = rememberNavController()
                 SetupNavGraph(
-                    navController = navController ,
-//                    startDestination = getStartDestination()
-                )
+                    navController = navController ,)
             }
         }
     }
 
-//    private fun getStartDestination(): String {
-//
-//        val user = Firebase.auth.currentUser
-//       return if(user != null) Screen.Home.route
-//        else Screen.Authentication.route
-//    }
 
 }
 

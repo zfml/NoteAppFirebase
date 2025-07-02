@@ -96,10 +96,7 @@ fun HomeScreen(
                         notes = notesUiState.notes
                     )
                 }else {
-                    EmptyPage(
-                        title = "No Note",
-                        subTitle = "Write Something.."
-                    )
+                    EmptyScreen()
                 }
 
             }

@@ -42,8 +42,7 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SetupNavGraph(
-    navController: NavHostController,
-//    startDestination: String
+    navController: NavHostController
 ) {
 
 
